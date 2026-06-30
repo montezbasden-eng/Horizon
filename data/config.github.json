@@ -2,51 +2,88 @@
   "version": "1.0",
   "ai": {
     "provider": "deepseek",
-    "model": "deepseek-v4-flash",
-    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-chat",
     "api_key_env": "DEEPSEEK_API_KEY",
     "temperature": 0.3,
-    "max_tokens": 8192,
-    "throttle_sec": 1,
-    "languages": [
-      "zh",
-      "en"
-    ],
-    "analysis_concurrency": 5,
-    "enrichment_concurrency": 5
+    "max_tokens": 4096,
+    "throttle_sec": 1.5,
+    "analysis_concurrency": 1,
+    "enrichment_concurrency": 1
+  },
+  "email": {
+    "enabled": false,
+    "smtp_server": "smtp.qq.com",
+    "smtp_port": 465,
+    "imap_server": "imap.qq.com",
+    "imap_port": 993,
+    "email_address": "xxx@qq.com",
+    "sender_name": "Horizon Daily",
+    "subscribe_keyword": "SUBSCRIBE",
+    "unsubscribe_keyword": "UNSUBSCRIBE"
   },
   "sources": {
     "github": [
       {
-        "type": "user_events",
-        "username": "karpathy",
+        "type": "repo_releases",
+        "owner": "comfyanonymous",
+        "repo": "ComfyUI",
         "enabled": true
       },
       {
         "type": "repo_releases",
-        "owner": "vllm-project",
-        "repo": "vllm",
+        "owner": "AUTOMATIC1111",
+        "repo": "stable-diffusion-webui",
         "enabled": true
       },
       {
         "type": "repo_releases",
-        "owner": "sgl-project",
-        "repo": "sglang",
+        "owner": "microsoft",
+        "repo": "autogen",
         "enabled": true
       },
       {
         "type": "repo_releases",
-        "owner": "triton-lang",
-        "repo": "triton",
+        "owner": "langchain-ai",
+        "repo": "langchain",
         "enabled": true
       }
     ],
     "hackernews": {
       "enabled": true,
       "fetch_top_stories": 30,
-      "min_score": 150
+      "min_score": 80
     },
     "rss": [
+      {
+        "name": "OpenAI News",
+        "url": "https://openai.com/news/rss.xml",
+        "enabled": true,
+        "category": "ai-news"
+      },
+      {
+        "name": "Anthropic News",
+        "url": "https://www.anthropic.com/news/rss.xml",
+        "enabled": true,
+        "category": "ai-news"
+      },
+      {
+        "name": "Google AI Blog",
+        "url": "https://blog.google/technology/ai/rss/",
+        "enabled": true,
+        "category": "ai-news"
+      },
+      {
+        "name": "Hugging Face Blog",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "enabled": true,
+        "category": "ai-tools"
+      },
+      {
+        "name": "Replicate Blog",
+        "url": "https://replicate.com/blog/rss",
+        "enabled": true,
+        "category": "ai-tools"
+      },
       {
         "name": "Simon Willison",
         "url": "https://simonwillison.net/atom/everything/",
@@ -54,96 +91,167 @@
         "category": "ai-tools"
       },
       {
-        "name": "GitHub Trending - Daily",
-        "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml",
+        "name": "DeepLearning.AI The Batch",
+        "url": "https://www.deeplearning.ai/the-batch/feed/",
         "enabled": true,
-        "category": "github-trending"
+        "category": "ai-news"
       },
       {
-        "name": "Semianalysis",
-        "url": "https://newsletter.semianalysis.com/feed",
+        "name": "VentureBeat AI",
+        "url": "https://venturebeat.com/category/ai/feed/",
         "enabled": true,
-        "category": "semiconductors"
+        "category": "ai-news"
       },
       {
-        "name": "LWN.net",
-        "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
+        "name": "No Film School",
+        "url": "https://nofilmschool.com/rss.xml",
         "enabled": true,
-        "category": "linux-kernel"
+        "category": "film-making"
       }
     ],
     "reddit": {
       "enabled": true,
       "subreddits": [
         {
-          "subreddit": "MachineLearning",
-          "enabled": true,
-          "sort": "hot",
-          "time_filter": "day",
-          "fetch_limit": 10,
-          "min_score": 60
-        },
-        {
           "subreddit": "LocalLLaMA",
           "enabled": true,
           "sort": "hot",
           "time_filter": "day",
-          "fetch_limit": 10,
-          "min_score": 60
+          "fetch_limit": 20,
+          "min_score": 30
+        },
+        {
+          "subreddit": "StableDiffusion",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "day",
+          "fetch_limit": 20,
+          "min_score": 50
+        },
+        {
+          "subreddit": "MachineLearning",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "day",
+          "fetch_limit": 20,
+          "min_score": 30
+        },
+        {
+          "subreddit": "Filmmakers",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "week",
+          "fetch_limit": 15,
+          "min_score": 30
         }
       ],
       "users": [],
-      "fetch_comments": 10
+      "fetch_comments": 5
     },
-    "telegram": {
+    "twitter": {
+      "enabled": false,
+      "users": [
+        "karpathy",
+        "sama",
+        "simonw"
+      ],
+      "fetch_limit": 10,
+      "fetch_reply_text": false,
+      "max_replies_per_tweet": 3,
+      "max_tweets_to_expand": 10,
+      "reply_min_likes": 5
+    },
+    "openbb": {
+      "enabled": false,
+      "fetch_filings": false,
+      "filings_provider": "sec",
+      "watchlists": []
+    },
+    "ossinsight": {
       "enabled": true,
-      "channels": [
-        {
-          "channel": "zaihuapd",
-          "enabled": true,
-          "fetch_limit": 20
-        }
-      ]
+      "period": "past_24_hours",
+      "languages": [
+        "All",
+        "Python",
+        "TypeScript"
+      ],
+      "keywords": [
+        "ai",
+        "video",
+        "agent",
+        "llm",
+        "image",
+        "comfyui",
+        "workflow",
+        "tts",
+        "voice"
+      ],
+      "min_stars": 20,
+      "max_items": 40
+    },
+    "gdelt": {
+      "enabled": false,
+      "query": "artificial intelligence",
+      "mode": "ArtList",
+      "max_records": 75,
+      "timespan": null,
+      "language": null,
+      "country": null,
+      "category": "news"
+    },
+    "google_news": {
+      "enabled": true,
+      "query": "(AI video OR AIGC OR generative video OR short drama OR micro drama OR Sora OR Runway OR Kling OR Hailuo OR Jimeng OR 可灵 OR 即梦 OR 海螺 OR 短剧)",
+      "language": "zh-CN",
+      "country": "CN",
+      "ceid": null,
+      "max_results": 60,
+      "category": "industry-news"
     }
   },
   "filtering": {
-    "ai_score_threshold": 8.0,
-    "time_window_hours": 24
+    "ai_score_threshold": 6.5,
+    "time_window_hours": 24,
+    "max_items": 24,
+    "category_groups": {
+      "ai_tools": {
+        "name": "AI 工具 / AIGC",
+        "limit": 8,
+        "categories": [
+          "ai-tools",
+          "ai-news"
+        ]
+      },
+      "film_industry": {
+        "name": "影视 / 短剧 / 创作",
+        "limit": 8,
+        "categories": [
+          "film-making",
+          "industry-news"
+        ]
+      },
+      "github_tools": {
+        "name": "GitHub 新工具",
+        "limit": 5,
+        "categories": [
+          "github"
+        ]
+      }
+    },
+    "default_group": "other",
+    "default_group_limit": 3
   },
   "webhook": {
-    "enabled": true,
+    "enabled": false,
     "url_env": "HORIZON_WEBHOOK_URL",
-    "delivery": "summary_and_items",
-    "overview_position": "last",
-    "platform": "feishu",
-    "layout": "collapsible",
+    "delivery": "summary",
+    "overview_position": "first",
+    "platform": "generic",
+    "layout": "markdown",
     "fallback_layout": "markdown",
-    "languages": [
-      "zh"
-    ],
+    "languages": null,
     "request_body": {
-      "msg_type": "interactive",
-      "card": {
-        "schema": "2.0",
-        "config": {
-          "wide_screen_mode": true
-        },
-        "header": {
-          "title": {
-            "tag": "plain_text",
-            "content": "#{message_title}"
-          },
-          "template": "blue"
-        },
-        "body": {
-          "elements": [
-            {
-              "tag": "markdown",
-              "content": "#{summary}"
-            }
-          ]
-        }
-      }
+      "text": "#{message_title}\n#{summary}"
     },
     "headers": ""
   }
